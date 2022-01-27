@@ -131,3 +131,45 @@ public FieldError(String objectName, String field, @Nullable Object, rejectedVal
 FieldError 는 오류 발생시 사용자 입력 값을 저장하는 기능을 제공한다.
 여기서 rejectedValue 가 바로 오류 발생시 사용자 입력 값을 저장하는 필드다.
 bindingFailure 는 타입 오류 같은 바인딩이 실패했는지 여부를 적어주면 된다. 여기서는 바인딩이 실패한 것은 아니기 때문에 false 를 사용한다.
+
+
+## Validator
+```java
+interface Validator {
+
+	boolean supports(Class<?> clazz);
+
+	void validate(Object target, Errors errors);
+}
+```
+- supports() {}: 해당 검증기를 지원하는 여부 확인
+- validate(Object target, Errors errors): 검증 대상 객체와 BindingResult
+
+
+### WebDataBinder를 통해 사용하기
+```java
+    @InitBinder
+    public void init(WebDataBinder dataBinder) {
+        dataBinder.addValidators(itemValidator);
+    }
+```
+- `WebDataBinder` 검증기를 추가하면 해당 컨트롤러에서는 검증기를 자동으로 적용할 수 있다
+```java
+    @PostMapping("/add")
+    public String addItemV6(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+
+        //검증에 실패하면 다시 입력 폼으로
+        if (bindingResult.hasErrors()) {
+            log.info("errors={} ", bindingResult);
+            return "validation/v2/addForm";
+        }
+
+        //성공 로직
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/validation/v2/items/{itemId}";
+    }
+```
+- 검증 대상앞에 `@validated` 사용
+- 이 애노테이션이 붙으면 앞서 WebDataBinder 에 등록한 검증기를 찾아서 실행한다. 그런데 여러 검증기를 등록한다면 그 중에 어떤 검증기가 실행되어야 할지 구분이 필요하다. 이때 supports() 가 사용된다.
