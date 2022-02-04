@@ -7,9 +7,30 @@ Filter는 Java Servlet에 정의된 개념<br>
 Java Servlet의 스펙이므로 스프링 프레임워크 없이도 사용 가능하다.<br>
 Spring MVC를 사용하는 경우 DispatcherServlet 전에 호출됨
 
+- 필터 등록 방법
+```java
+@Bean
+public FilterRegistrationBean logFilter() {
+    FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
+    filterRegistrationBean.setFilter(new LogFilter());
+    filterRegistrationBean.setOrder(1);
+    filterRegistrationBean.addUrlPatterns("/*");
+    return filterRegistrationBean;
+}
+```
+
 ## Interceptor
 SpringFramework에서 자체적으로 제공하는 기능이다.<br>
 DispatcherServlet에서 Handler(Controller)로 가기전에 처리한다.
+
+- 인터셉터 등록 방법
+```java
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(customInterceptor)
+                .addPathPatterns("/**");
+    }
+```
 
 ### ModelAndView를 컨트롤 해야하는 경우
 Filter는 DispatcherServlet의 전후의 요청을 처리할 수 있기 때문에 ModelAndView에 접근이 불가능하다.<br>
