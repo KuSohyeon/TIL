@@ -56,7 +56,7 @@
 
 하나의 토픽이 한 번에 처리할 수 있는 한계를 높이기 위해 토픽 하나를 여러 개로 나눠 병렬 처리가 가능하게 만든 것을 파티션이라고 한다. 하나의 토픽을 여러개로 나눈다면 분산처리도 가능하다. 나뉜 파티션 수 만큼 컨슈머를 연결할 수도 있다.
 
-![Untitled](./chap3/Untitled.png)
+![Untitled](img/chap3/Untitled.png)
 
 파티션의 수는 초기 생성 후 언제든지 늘릴 수 있지만, 반대로 한 번 늘린 파티션 수는 절대로 줄일 수 없다는 점을 명심해야한다.
 
@@ -64,7 +64,7 @@
 
 프로듀서에 의해 브로커에 전송된 메세지는 토픽의 파티션에 저장되며, 각 메세지는 세그먼트라는 로그 파일의 형태로 브로커의 로컬 디스크에 저장된다.
 
-![Untitled](./chap3/Untitled1.png)
+![Untitled](img/chap3/Untitled1.png)
 
 **지금까지 카프카 요청 흐름 정리**
 
@@ -84,7 +84,7 @@
 
 페이지 캐시는 직접 디스크에 읽고 쓰는 대신 물리 메모리 중 애플리케이션이 사용하지 않는 일부 잔여 메모리를 활용합니다. 이렇게 페이지 캐시를 이용하면 디스크 I/O에 대한 접근이 줄어드므로 성능을 높일 수 있습니다.
 
-![Untitled](./chap3/Untitled2.png)
+![Untitled](img/chap3/Untitled2.png)
 
 카프카가 OS의 페이지 캐시를 이용한다는 것은 카프카가 직접 디스크에서 읽고 쓰기를 하지 않고 페이지 캐시를 통해 읽고 쓰기를 한다는 의미이다.
 
@@ -106,7 +106,7 @@
 
 카프카에서는 이 오프셋을 통해 메세지의 순서를 보장하고 컨슈머에서는 마지막까지 읽은 위치를 알 수도 있습니다.
 
-![Untitled](./chap3/Untitled3.png)
+![Untitled](img/chap3/Untitled3.png)
 
 (그림 출처 - [https://medium.com/@umanking/카프카에-대해서-이야기-하기전에-먼저-data에-대해서-이야기해보자-d2e3ca2f3c2](https://medium.com/@umanking/%EC%B9%B4%ED%94%84%EC%B9%B4%EC%97%90-%EB%8C%80%ED%95%B4%EC%84%9C-%EC%9D%B4%EC%95%BC%EA%B8%B0-%ED%95%98%EA%B8%B0%EC%A0%84%EC%97%90-%EB%A8%BC%EC%A0%80-data%EC%97%90-%EB%8C%80%ED%95%B4%EC%84%9C-%EC%9D%B4%EC%95%BC%EA%B8%B0%ED%95%B4%EB%B3%B4%EC%9E%90-d2e3ca2f3c2))
 
@@ -124,7 +124,7 @@
 
 ### 3.3.1 프로듀서 디자인
 
-![Untitled](./chap3/Untitled4.png)
+![Untitled](img/chap3/Untitled4.png)
 
 `ProducerRecord`라고 표시된 부분은 카프카로 전송하기 위한 실제 데이터이며, 레코드는 토픽, 파티션, 키, 벨류로 구성됩니다. 프로듀서가 카프카로 레코드를 전송할 때, 카프카의 특정 토픽으로 메세지를 전송합니다. 따라서 레코드에서 토픽과 벨류(메세지)는 필수값이며, 특정 파티션을 지정하기 위한 레코드의 파티션과 특정 파티션에 레코드를 정렬하기 위한 레코드의 키는 필수값이 아닌 선택사항입니다.
 
@@ -176,11 +176,11 @@
 
 컨슈머는 컨슈머 그룹 안에 속한 것이 일반적인 구조로, 하나의 컨슈머 그룹 안에 여러 개의 컨슈머가 구성될 수 있습니다. 그리고 컨슈머들은 토픽의 파티션과 일대일로 매핑되어 메세지를 가져오게 됩니다.
 
-![Untitled](./chap3/Untitled5.png)
+![Untitled](img/chap3/Untitled5.png)
 
-![Untitled](./chap3/Untitled6.png)
+![Untitled](img/chap3/Untitled6.png)
 
-![Untitled](./chap3/Untitled7.png)
+![Untitled](img/chap3/Untitled7.png)
 
 예를 들어 컨슈머01이 문제가 생겨 종료됐다면, 컨슈머02 또는 컨슈머03이 컨슈머01이 하던 일을 대신해 peter-01 토픽의 파티션0을 컨슘하기 시작합니다.
 
